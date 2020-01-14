@@ -1,57 +1,45 @@
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+const list_items = document.querySelectorAll('.list-item')
+const lists = document.querySelectorAll('.list')
+
+let draggedItem = null
+
+for (let i = 0; i < list_items.length; i++) {
+  const item = list_items[i]
+
+  item.addEventListener('dragstart', function() {
+    draggedItem = item
+    setTimeout(function() {
+      item.style.display = 'none'
+    }, 0)
+  })
+
+  item.addEventListener('dragend', function() {
+    setTimeout(function() {
+      draggedItem.style.display = 'block'
+      draggedItem = null
+    }, 0)
+  })
 }
 
-body {
-	background-color: #FFCE00;
-	font-family: 'Roboto', Helvetica, sans-serif;
-}
+for (let j = 0; j < lists.length; j++) {
+  const list = lists[j]
 
-.app {
-	display: flex;
-	flex-flow: column;
+  list.addEventListener('dragover', function(e) {
+    e.preventDefault()
+  })
 
-	width: 100vw;
-	height: 100vh;
-}
+  list.addEventListener('dragenter', function(e) {
+    e.preventDefault()
+    this.style.backgroundColor = 'rgba(0, 0, 0, 0.2)'
+  })
 
-header {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 60px;
-}
+  list.addEventListener('dragleave', function(e) {
+    this.style.backgroundColor = 'rgba(0, 0, 0, 0.1)'
+  })
 
-.lists {
-	display: flex;
-	flex: 1;
-	width: 100%;
-	overflow-x: scroll;
-}
-
-.lists .list {
-	display: flex;
-	flex-flow: column;
-	flex: 1;
-
-	width: 100%;
-	min-width: 250px;
-	max-width: 350px;
-	height: 100%;
-	min-height: 150px;
-
-	background-color: rgba(0, 0, 0, 0.1);
-	margin: 0 15px;
-	padding: 8px;
-	transition: all 0.2s linear;
-}
-
-.lists .list .list-item {
-	background-color: #F3F3F3;
-	border-radius: 8px;
-	padding: 15px 20px;
-	text-align: center;
-	margin: 4px 0px;
+  list.addEventListener('drop', function(e) {
+    console.log('drop')
+    this.append(draggedItem)
+    this.style.backgroundColor = 'rgba(0, 0, 0, 0.1)'
+  })
 }
